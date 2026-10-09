@@ -1,0 +1,22 @@
+# Editors and operating systems
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (the tools need no packages, but just in case)
+node_modules/
+npm-debug.log*
+*.log
+
+# Scratch output: Natural Earth downloads kept for tools/fetch-earth.js <dir>, test runs
+tools/out/
+
+# Vercel's local link to the project (vercel link / vercel dev)
+.vercel/
+
+# Secrets
+.env
+.env.*

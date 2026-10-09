@@ -1,0 +1,7 @@
+# Not part of the website: dotfiles, documents, the developer tools and the README's pictures.
+# The site is index.html (the landing page) and play.html (the game) with css/, js/, fonts/ and
+# media/; HurricaneBrawl.html is the game in one file, to download.
+/.*
+/*.md
+/tools
+/media/readme

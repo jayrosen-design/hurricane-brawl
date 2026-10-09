@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hurricane Brawl · six natural disasters, one planet</title>
+<meta name="description" content="A free 3D browser game: play a hurricane, tornado, blizzard, sandstorm, supercell or wildfire, brawl the other five over a real Earth and wreck the most of the world before the time runs out. Keyboard, mouse or controller.">
+<meta property="og:title" content="Hurricane Brawl">
+<meta property="og:description" content="Six natural disasters. One planet. Brawl over a real 3D Earth in your browser.">
+<meta property="og:image" content="media/trailer-poster.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0d0906">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Hurricane Brawl, to the top"><img src="favicon.svg" width="34" height="34" alt=""><span>Hurricane Brawl</span></a>
+  <nav aria-label="Sections">
+    <a href="#fighters">Fighters</a>
+    <a href="#food-chain">Food chain</a>
+    <a href="#how">How it plays</a>
+    <a href="#controls">Controls</a>
+  </nav>
+  <a class="btn btn-lava btn-sm" href="play.html">Play now</a>
+</header>
+
+<main id="main">
+  <!-- the hero: the game itself behind the title -->
+  <section class="hero" id="top">
+    <video class="hero-video" autoplay muted loop playsinline width="1280" height="720" poster="media/hero-poster.jpg" aria-hidden="true">
+      <source src="media/hero-loop.mp4" type='video/mp4; codecs="avc1.64001F"'>
+      <source src="media/hero-loop.webm" type='video/webm; codecs="vp9"'>
+    </video>
+    <div class="hero-shade"></div>
+    <div class="hero-in">
+      <p class="kicker">Tonight · live from planet Earth</p>
+      <h1><span>Nature's</span> <span>heavyweights</span> <span class="thin">one planet</span></h1>
+      <p class="lede">Six natural disasters brawl across a real 3D Earth. Feed on the terrain that makes you stronger, wreck the cities in your path, knock out the other five. Most damage when the clock runs out wins.</p>
+      <div class="cta">
+        <a class="btn btn-lava btn-xl" href="play.html">Play free <small>in your browser</small></a>
+        <button class="btn btn-ghost btn-xl" type="button" data-trailer><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>Watch the trailer <small>1:00</small></button>
+      </div>
+      <p class="devices">Keyboard · Mouse · Xbox · Switch Pro · PlayStation · No install</p>
+    </div>
+    <div class="tape" aria-hidden="true"><div><span>Six disasters</span><span>One planet</span><span>No mercy</span><span>Six disasters</span><span>One planet</span><span>No mercy</span><span>Six disasters</span><span>One planet</span><span>No mercy</span></div></div>
+  </section>
+
+  <section class="stakes" aria-label="What's at stake">
+    <div class="stake reveal"><b>$49.7<small>trillion</small></b><span>of world to wreck</span></div>
+    <div class="stake reveal"><b>826</b><span>real cities</span></div>
+    <div class="stake reveal"><b>6</b><span>disasters, one each</span></div>
+    <div class="stake reveal"><b>2–5<small>min</small></b><span>a match</span></div>
+  </section>
+
+  <!-- the roster: generated from js/storms.js by tools/build.js -->
+  <section class="sect fighters" id="fighters">
+    <header class="sect-head reveal">
+      <p class="kicker">The roster</p>
+      <h2>Choose your disaster</h2>
+      <p>Each one feeds on its own kind of Earth and dies on another. Each has a finisher. And each one is somebody's prey.</p>
+    </header>
+    <div class="roster">
+      <!-- fighters:start -->
+      <article class="fighter reveal" id="fighter-hurricane" style="--c: #38c8e0">
+        <figure class="f-portrait"><img src="media/fighters/hurricane.jpg" width="640" height="640" loading="lazy" alt="The hurricane in the game, using its storm surge"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Eye of the Ocean</p>
+          <h3>Hurricane</h3>
+          <p class="f-blurb">The biggest storm on Earth. Feeds on warm ocean and falls apart over land, so strike the coasts and get back out to sea.</p>
+          <ul class="f-stats"><li style="--v: 1"><span>Size</span><i></i><b>100</b></li><li style="--v: 0.68"><span>Speed</span><i></i><b>68</b></li><li style="--v: 0.94"><span>Wrecking</span><i></i><b>94</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Warm ocean</dd>
+            <dt>Finisher</dt><dd><b>Storm surge</b> A ring of wind and sea bursts out, flinging storms back and flooding every coastal city it reaches.</dd>
+            <dt>Beats</dt><dd><a href="#fighter-wildfire" style="--c: #ff6a2b">Wildfire</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-sandstorm" style="--c: #f0a94e">Sandstorm</a></dd>
+          </dl>
+        </div>
+      </article>
+      <article class="fighter reveal" id="fighter-tornado" style="--c: #c9b08e">
+        <figure class="f-portrait"><img src="media/fighters/tornado.jpg" width="640" height="640" loading="lazy" alt="The tornado in the game, using its twister dash"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Plains Ripper</p>
+          <h3>Tornado</h3>
+          <p class="f-blurb">Small, fast and violent. Lives on the open plains and dies over the sea. Its dash tears through cities and rivals.</p>
+          <ul class="f-stats"><li style="--v: 0.32"><span>Size</span><i></i><b>32</b></li><li style="--v: 1"><span>Speed</span><i></i><b>100</b></li><li style="--v: 0.28"><span>Wrecking</span><i></i><b>28</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Temperate land, tropical land</dd>
+            <dt>Finisher</dt><dd><b>Twister dash</b> A second at three times the speed, hitting harder and taking less.</dd>
+            <dt>Beats</dt><dd><a href="#fighter-supercell" style="--c: #a493ff">Supercell</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-blizzard" style="--c: #bfe4ff">Blizzard</a></dd>
+          </dl>
+        </div>
+      </article>
+      <article class="fighter reveal" id="fighter-blizzard" style="--c: #bfe4ff">
+        <figure class="f-portrait"><img src="media/fighters/blizzard.jpg" width="640" height="640" loading="lazy" alt="The blizzard in the game, using its whiteout"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Frozen Wall</p>
+          <h3>Blizzard</h3>
+          <p class="f-blurb">A wall of snow from the far north. Strong over ice, tundra and cold seas; it can cross temperate land but melts in the tropics.</p>
+          <ul class="f-stats"><li style="--v: 0.92"><span>Size</span><i></i><b>92</b></li><li style="--v: 0.63"><span>Speed</span><i></i><b>63</b></li><li style="--v: 1"><span>Wrecking</span><i></i><b>100</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Ice, tundra &amp; taiga, cold ocean</dd>
+            <dt>Finisher</dt><dd><b>Whiteout</b> Freezes everything around it for five seconds: rivals inside crawl and drain away.</dd>
+            <dt>Beats</dt><dd><a href="#fighter-tornado" style="--c: #c9b08e">Tornado</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-wildfire" style="--c: #ff6a2b">Wildfire</a></dd>
+          </dl>
+        </div>
+      </article>
+      <article class="fighter reveal" id="fighter-sandstorm" style="--c: #f0a94e">
+        <figure class="f-portrait"><img src="media/fighters/sandstorm.jpg" width="640" height="640" loading="lazy" alt="The sandstorm in the game, using its dust wall"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Desert King</p>
+          <h3>Sandstorm</h3>
+          <p class="f-blurb">A haboob off the great deserts. Strong over sand, fading slowly elsewhere. Its dust wall rolls out ahead of it.</p>
+          <ul class="f-stats"><li style="--v: 0.76"><span>Size</span><i></i><b>76</b></li><li style="--v: 0.79"><span>Speed</span><i></i><b>79</b></li><li style="--v: 0.59"><span>Wrecking</span><i></i><b>59</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Desert</dd>
+            <dt>Finisher</dt><dd><b>Dust wall</b> A wall of dust 2,000 km long rolls out ahead, battering storms and cities in its way.</dd>
+            <dt>Beats</dt><dd><a href="#fighter-hurricane" style="--c: #38c8e0">Hurricane</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-supercell" style="--c: #a493ff">Supercell</a></dd>
+          </dl>
+        </div>
+      </article>
+      <article class="fighter reveal" id="fighter-supercell" style="--c: #a493ff">
+        <figure class="f-portrait"><img src="media/fighters/supercell.jpg" width="640" height="640" loading="lazy" alt="The supercell in the game, using its lightning"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Thunder Throne</p>
+          <h3>Supercell</h3>
+          <p class="f-blurb">A rotating thunderstorm that does well almost anywhere warm and wet. Calls lightning down far from itself.</p>
+          <ul class="f-stats"><li style="--v: 0.57"><span>Size</span><i></i><b>57</b></li><li style="--v: 0.84"><span>Speed</span><i></i><b>84</b></li><li style="--v: 0.35"><span>Wrecking</span><i></i><b>35</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Tropical land, temperate land, warm ocean</dd>
+            <dt>Finisher</dt><dd><b>Lightning</b> Three bolts up to 2,600 km away, where you aim (or at the nearest rival).</dd>
+            <dt>Beats</dt><dd><a href="#fighter-sandstorm" style="--c: #f0a94e">Sandstorm</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-tornado" style="--c: #c9b08e">Tornado</a></dd>
+          </dl>
+        </div>
+      </article>
+      <article class="fighter reveal" id="fighter-wildfire" style="--c: #ff6a2b">
+        <figure class="f-portrait"><img src="media/fighters/wildfire.jpg" width="640" height="640" loading="lazy" alt="The wildfire in the game, using its firestorm"></figure>
+        <div class="f-body">
+          <p class="f-epithet">The Burning Front</p>
+          <h3>Wildfire</h3>
+          <p class="f-blurb">A firestorm that makes its own weather. Burns through forests and grassland; water and ice put it out.</p>
+          <ul class="f-stats"><li style="--v: 0.62"><span>Size</span><i></i><b>62</b></li><li style="--v: 0.64"><span>Speed</span><i></i><b>64</b></li><li style="--v: 0.36"><span>Wrecking</span><i></i><b>36</b></li></ul>
+          <dl class="f-facts">
+            <dt>Home turf</dt><dd>Temperate land, tropical land, tundra &amp; taiga</dd>
+            <dt>Finisher</dt><dd><b>Firestorm</b> Sets the ground round it alight for seven seconds: cities and rivals there burn.</dd>
+            <dt>Beats</dt><dd><a href="#fighter-blizzard" style="--c: #bfe4ff">Blizzard</a></dd>
+            <dt>Fears</dt><dd><a href="#fighter-hurricane" style="--c: #38c8e0">Hurricane</a></dd>
+          </dl>
+        </div>
+      </article>
+      <!-- fighters:end -->
+    </div>
+  </section>
+
+  <!-- who beats whom: generated from js/storms.js by tools/build.js -->
+  <section class="sect chain" id="food-chain">
+    <header class="sect-head reveal">
+      <p class="kicker">Faceoffs</p>
+      <h2>The food chain</h2>
+      <p>When two storms meet they lock together and spin round each other, the way real hurricanes do (the Fujiwhara effect), draining each other dry. The one that's strong against the other hits half as hard again.</p>
+    </header>
+    <div class="chain-in">
+      <!-- chain:start -->
+        <svg class="chain-ring" viewBox="0 0 600 640" role="img" aria-label="The food chain: Sandstorm beats Hurricane beats Wildfire beats Blizzard beats Tornado beats Supercell beats Sandstorm">
+          <defs><marker id="tip" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>
+          <g class="arcs" fill="none" stroke-width="7" stroke-linecap="round" marker-end="url(#tip)"><path d="M358.9 129.0 Q402.7 115.0 413.4 160.5" stroke="#f0a94e" /><path d="M477.5 265.5 Q511.5 296.4 477.5 328.5" stroke="#38c8e0" /><path d="M418.6 436.5 Q408.9 481.4 364.1 468.0" stroke="#ff6a2b" /><path d="M241.1 471.0 Q197.3 485.0 186.6 439.5" stroke="#bfe4ff" /><path d="M122.5 334.5 Q88.5 303.6 122.5 271.5" stroke="#c9b08e" /><path d="M181.4 163.5 Q191.1 118.6 235.9 132.0" stroke="#a493ff" /></g><g class="node"><clipPath id="clip-sandstorm"><circle cx="300.0" cy="95.0" r="58"/></clipPath><image href="media/fighters/sandstorm.jpg" x="242.0" y="37.0" width="116" height="116" clip-path="url(#clip-sandstorm)" preserveAspectRatio="xMidYMid slice"/><circle cx="300.0" cy="95.0" r="58" fill="none" stroke="#f0a94e" stroke-width="5"/><text x="300.0" y="179.0">Sandstorm</text></g><g class="node"><clipPath id="clip-hurricane"><circle cx="477.5" cy="197.5" r="58"/></clipPath><image href="media/fighters/hurricane.jpg" x="419.5" y="139.5" width="116" height="116" clip-path="url(#clip-hurricane)" preserveAspectRatio="xMidYMid slice"/><circle cx="477.5" cy="197.5" r="58" fill="none" stroke="#38c8e0" stroke-width="5"/><text x="477.5" y="281.5">Hurricane</text></g><g class="node"><clipPath id="clip-wildfire"><circle cx="477.5" cy="402.5" r="58"/></clipPath><image href="media/fighters/wildfire.jpg" x="419.5" y="344.5" width="116" height="116" clip-path="url(#clip-wildfire)" preserveAspectRatio="xMidYMid slice"/><circle cx="477.5" cy="402.5" r="58" fill="none" stroke="#ff6a2b" stroke-width="5"/><text x="477.5" y="486.5">Wildfire</text></g><g class="node"><clipPath id="clip-blizzard"><circle cx="300.0" cy="505.0" r="58"/></clipPath><image href="media/fighters/blizzard.jpg" x="242.0" y="447.0" width="116" height="116" clip-path="url(#clip-blizzard)" preserveAspectRatio="xMidYMid slice"/><circle cx="300.0" cy="505.0" r="58" fill="none" stroke="#bfe4ff" stroke-width="5"/><text x="300.0" y="589.0">Blizzard</text></g><g class="node"><clipPath id="clip-tornado"><circle cx="122.5" cy="402.5" r="58"/></clipPath><image href="media/fighters/tornado.jpg" x="64.5" y="344.5" width="116" height="116" clip-path="url(#clip-tornado)" preserveAspectRatio="xMidYMid slice"/><circle cx="122.5" cy="402.5" r="58" fill="none" stroke="#c9b08e" stroke-width="5"/><text x="122.5" y="486.5">Tornado</text></g><g class="node"><clipPath id="clip-supercell"><circle cx="122.5" cy="197.5" r="58"/></clipPath><image href="media/fighters/supercell.jpg" x="64.5" y="139.5" width="116" height="116" clip-path="url(#clip-supercell)" preserveAspectRatio="xMidYMid slice"/><circle cx="122.5" cy="197.5" r="58" fill="none" stroke="#a493ff" stroke-width="5"/><text x="122.5" y="281.5">Supercell</text></g>
+        </svg>
+        <ol class="chain-list"><li class="vs reveal" style="--a: #f0a94e; --b: #38c8e0"><p><b class="a">Sandstorm</b> <span>beats</span> <b class="b">Hurricane</b></p><small>Dry desert dust starves a hurricane.</small></li><li class="vs reveal" style="--a: #38c8e0; --b: #ff6a2b"><p><b class="a">Hurricane</b> <span>beats</span> <b class="b">Wildfire</b></p><small>Torrential rain drowns a fire.</small></li><li class="vs reveal" style="--a: #ff6a2b; --b: #bfe4ff"><p><b class="a">Wildfire</b> <span>beats</span> <b class="b">Blizzard</b></p><small>Fire melts the snow.</small></li><li class="vs reveal" style="--a: #bfe4ff; --b: #c9b08e"><p><b class="a">Blizzard</b> <span>beats</span> <b class="b">Tornado</b></p><small>Cold, stable air kills a tornado’s updraft.</small></li><li class="vs reveal" style="--a: #c9b08e; --b: #a493ff"><p><b class="a">Tornado</b> <span>beats</span> <b class="b">Supercell</b></p><small>A tornado tears the storm’s updraft apart.</small></li><li class="vs reveal" style="--a: #a493ff; --b: #f0a94e"><p><b class="a">Supercell</b> <span>beats</span> <b class="b">Sandstorm</b></p><small>Rain washes the dust out of the air.</small></li></ol>
+      <!-- chain:end -->
+    </div>
+  </section>
+
+  <section class="sect how" id="how">
+    <header class="sect-head reveal">
+      <p class="kicker">How it plays</p>
+      <h2>Feed. Wreck. Brawl.</h2>
+    </header>
+    <div class="pillars">
+      <article class="pillar reveal">
+        <img src="media/how-feed.jpg" width="960" height="540" loading="lazy" alt="The game's big map, green where your storm gains energy and red where it loses it">
+        <h3><i>01</i> Feed</h3>
+        <p>Your energy is your health and your size. Warm ocean makes a hurricane a category 5; land tears it apart. A tornado wants the open plains, a blizzard the frozen north. The big map shows where you thrive.</p>
+      </article>
+      <article class="pillar reveal">
+        <img src="media/how-wreck.jpg" width="960" height="540" loading="lazy" alt="A hurricane's storm surge flooding the Gulf of Mexico's coasts, with the damage in dollars over each city">
+        <h3><i>02</i> Wreck</h3>
+        <p>Every city under you pays out in dollars, and the countryside too. Hit a city again and it gives less, until it rebuilds. Real coastlines and 826 real cities, from Tokyo to Lagos.</p>
+      </article>
+      <article class="pillar reveal">
+        <img src="media/how-brawl.jpg" width="960" height="540" loading="lazy" alt="A hurricane and a wildfire locked together over the Atlantic, with a glow where they meet">
+        <h3><i>03</i> Brawl</h3>
+        <p>Boost into a rival to ram it, drain it in a Fujiwhara lock, finish it with your special. A storm at zero energy is gone for four seconds, and whoever took it out grows stronger.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="sect trailer" id="trailer" aria-labelledby="trailer-title">
+    <header class="sect-head reveal">
+      <p class="kicker">The trailer</p>
+      <h2 id="trailer-title">One minute of weather war</h2>
+    </header>
+    <div class="screen reveal">
+      <video controls preload="none" loading="lazy" width="1280" height="720" poster="media/trailer-poster.jpg">
+        <source src="media/trailer.mp4" type='video/mp4; codecs="avc1.64001F, mp4a.40.2"'>
+        <source src="media/trailer.webm" type='video/webm; codecs="vp9, opus"'>
+      </video>
+    </div>
+    <p class="note">Recorded from the game itself, with an original soundtrack.</p>
+  </section>
+
+  <section class="sect controls" id="controls">
+    <header class="sect-head reveal">
+      <p class="kicker">Controls</p>
+      <h2>Pick it up and play</h2>
+    </header>
+    <div class="pads">
+      <article class="pad reveal">
+        <h3>Keyboard</h3>
+        <dl>
+          <dt>Move</dt><dd><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows</dd>
+          <dt>Boost</dt><dd><kbd>Shift</kbd></dd>
+          <dt>Special</dt><dd><kbd>Space</kbd></dd>
+          <dt>Camera</dt><dd><kbd>Q</kbd><kbd>E</kbd> turn · <kbd>Z</kbd><kbd>X</kbd> zoom</dd>
+          <dt>Map · pause</dt><dd><kbd>Tab</kbd> · <kbd>Esc</kbd></dd>
+        </dl>
+      </article>
+      <article class="pad reveal">
+        <h3>Mouse</h3>
+        <dl>
+          <dt>Move</dt><dd>Hold the left button: your storm heads for the cursor</dd>
+          <dt>Boost</dt><dd>Double-click and hold</dd>
+          <dt>Special</dt><dd>Right button (lightning lands where you point)</dd>
+          <dt>Camera</dt><dd>Wheel zooms · middle-drag turns</dd>
+        </dl>
+      </article>
+      <article class="pad reveal">
+        <h3>Controller</h3>
+        <dl>
+          <dt>Move</dt><dd>Left stick</dd>
+          <dt>Boost</dt><dd><kbd>A</kbd> / <kbd>RT</kbd> · Switch <kbd>B</kbd> / <kbd>ZR</kbd> · PlayStation <kbd>✕</kbd> / <kbd>R2</kbd></dd>
+          <dt>Special</dt><dd><kbd>X</kbd> / <kbd>LT</kbd> · Switch <kbd>Y</kbd> / <kbd>ZL</kbd> · PlayStation <kbd>□</kbd> / <kbd>L2</kbd></dd>
+          <dt>Camera</dt><dd>Right stick</dd>
+          <dt>Map · pause</dt><dd>View · Menu (Switch − · +)</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="final-in reveal">
+      <h2>The planet won't wreck itself</h2>
+      <p>Free, in your browser, on any computer with a graphics card from the last decade.</p>
+      <div class="cta">
+        <a class="btn btn-lava btn-xl" href="play.html">Play Hurricane Brawl</a>
+        <a class="btn btn-ghost" href="HurricaneBrawl.html" download>Download the one-file version</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Coastlines, lakes, cities and countries from <a href="https://www.naturalearthdata.com">Natural Earth</a> (public domain). The climate and the values are a game's rough ones. 3D graphics by <a href="https://threejs.org">three.js</a>. Fonts: Anton and Barlow (SIL Open Font License). <a href="https://github.com/jayrosen-design/hurricane-brawl">Source on GitHub</a>.</p>
+  <p>A game about weather, not a forecast. Real disasters hurt real people.</p>
+</footer>
+
+<dialog class="trailer-box" id="trailer-box" closedby="any" aria-label="The Hurricane Brawl trailer">
+  <form method="dialog"><button class="close" aria-label="Close the trailer">×</button></form>
+  <video controls preload="none" width="1280" height="720" poster="media/trailer-poster.jpg">
+    <source src="media/trailer.mp4" type='video/mp4; codecs="avc1.64001F, mp4a.40.2"'>
+    <source src="media/trailer.webm" type='video/webm; codecs="vp9, opus"'>
+  </video>
+</dialog>
+
+<script src="js/site.js"></script>
+</body>
+</html>
