@@ -69,7 +69,7 @@ const BrawlGame = (() => {
       const d = S.TYPES[k], b = document.createElement('button');
       b.type = 'button'; b.className = 'sel-storm'; b.setAttribute('role', 'radio'); b.dataset.k = k;
       b.innerHTML = `<span style="color:${d.color}">${ICONS[k]}</span><div><b>${d.name}</b><span>${d.special.name}</span></div>`;
-      b.addEventListener('click', () => { setStorm(k); selRow = 0; showFocus(); AU.play('blip'); });
+      b.addEventListener('click', () => { setStorm(k); selRow = 0; showFocus(); });
       grid.appendChild(b);
     }
     const opts = (el, list, get, set) => {
@@ -88,7 +88,7 @@ const BrawlGame = (() => {
     for (const el of document.querySelectorAll('.sel-row')) el.addEventListener('pointerenter', () => { selRow = +el.dataset.row; showFocus(); });
     refreshSelect();
   }
-  function setStorm(k) { cfg.storm = k; store.set('storm', k); refreshSelect(); }
+  function setStorm(k) { cfg.storm = k; store.set('storm', k); refreshSelect(); AU.hit(k, 0.7); }
   function refreshSelect() {
     for (const b of document.querySelectorAll('.sel-storm')) b.setAttribute('aria-checked', String(b.dataset.k === cfg.storm));
     for (const el of [$('#sel-rivals'), $('#sel-time'), $('#sel-ai')]) for (const b of el.children) b.setAttribute('aria-checked', String(String(el._get()) === b.dataset.v));
@@ -239,7 +239,7 @@ const BrawlGame = (() => {
         if (e.s === 0) {
           const c = E.cities[e.c];
           popup(c, e.amount);
-          if (performance.now() - cityTick > 90) { cityTick = performance.now(); AU.play('city', 0.6); }
+          if (performance.now() - cityTick > 90) { cityTick = performance.now(); AU.hit(me.type, 0.35); }
         }
       } else if (e.type === 'devastated') {
         const c = E.cities[e.c];
@@ -255,9 +255,10 @@ const BrawlGame = (() => {
           const k = Math.min(1, e.amount / 12);
           cam.shake = Math.max(cam.shake, 0.3 + 0.7 * k);
           AU.play('thud', 0.5 + 0.5 * k);
+          AU.hit(sim.storms[e.a].type, 0.6 + 0.4 * k);
           IN.rumble(0.3 + 0.7 * k, 0.5, 120 + 200 * k);
           if (e.b === 0) flashHurt(k);
-        } else if (e.kind !== 'bolt') AU.play('thud', near(e.p) * 0.5);
+        } else if (e.kind !== 'bolt') { AU.play('thud', near(e.p) * 0.5); AU.hit(sim.storms[e.a].type, near(e.p) * 0.5); }
       } else if (e.type === 'special') {
         const s = sim.storms[e.s], v = e.s === 0 ? 1 : near(s.p) * 0.8;
         if (SPECIAL_SOUND[e.key]) AU.play(SPECIAL_SOUND[e.key], v);
@@ -550,7 +551,18 @@ const BrawlGame = (() => {
     const me = sim && state !== 'select' ? sim.storms[0] : null;
     let brawl = 0;
     if (me && me.alive) for (const o of sim.storms) if (o !== me && o.alive && E.dist(o.p, me.p) < (o.r + me.r) * Sim.CONTACT) brawl = 1;
-    AU.update(me && me.alive ? me.E / 100 : 0.25, camHeight(), brawl, state !== 'paused');
+    // each storm's own sound: yours by its energy and the camera's height, a rival's as it nears the
+    // camera (1,500 km off it is nearly as loud as yours; 5,000 km off, faint); on the select screen,
+    // the type picked
+    const heard = {};
+    if (me) {
+      for (const s of sim.storms) {
+        if (!s.alive) continue;
+        const v = (0.35 + 0.65 * s.E / 100) * (s === me ? 1.15 - 0.6 * camHeight() : 1.3 * near(s.p) ** 2);
+        heard[s.type] = { v, pan: s === me ? 0 : Math.max(-1, Math.min(1, render.project(s.p).nx)) * 0.7 };
+      }
+    } else if (state === 'select') heard[cfg.storm] = { v: 0.45, pan: 0 };
+    AU.update(heard, brawl, state !== 'paused');
     render.frame(simDt, cam, sunAngle);
     updateLabels();
     updateHUD(dt);
