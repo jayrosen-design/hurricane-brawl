@@ -6,7 +6,7 @@ It plays with a keyboard, a mouse or a controller (Xbox, Switch Pro or PlayStati
 
 <a href="media/trailer.mp4"><img src="media/trailer-poster.jpg" width="100%" alt="The trailer's poster: a hurricane and a wildfire locked together over the Atlantic. Click to watch the one-minute trailer"></a>
 
-**[Watch the trailer](media/trailer.mp4)** (1:00, recorded from the game) · **Play:** open `index.html` for the website or `play.html` for the game, or `HurricaneBrawl.html` (the whole game in one file) · **Deploy:** [Vercel](#the-website-and-vercel)
+**[Watch the trailer](media/trailer.mp4)** (1:00, recorded from the game) · **Play:** serve the folder (for example `python3 -m http.server`) and open `index.html` for the website or `play.html` for the game; opened straight from disk they work too, with synthesised sounds in place of the recorded ones. `HurricaneBrawl.html` is the whole game in one file (synthesised sounds unless it sits next to `media/sfx/`) · **Deploy:** [Vercel](#the-website-and-vercel)
 
 ---
 
@@ -98,18 +98,20 @@ Rumble works where the browser and the controller support it. On a touch screen,
 - **Lightning:** three bolts where you aim (the mouse) up to 2,600 km away, or at the nearest rival in range. Each takes 9 x energy/100 from a rival within about 320 km and wrecks the cities within 240 km.
 - **Firestorm:** seven patches of fire round the wildfire burn for 7 s. A rival in them loses 6 energy a second, and the cities in them burn.
 
-**The sounds.** Each type has its own, synthesised by `js/audio.js` with no sound files: a looping voice, and a hit that plays when it strikes another storm (and, for your storm, on each city it wrecks).
+**The sounds.** Each type has its own: a looping voice, a hit that plays when it strikes another storm (and, for your storm, on each city it wrecks), and its special's sound. They are recorded sound effects in `media/sfx/`, cut and levelled by `tools/sfx.js` from the downloads:
 
-| Storm | Voice | Hit |
-|---|---|---|
-| Hurricane | a deep roar, a howl that rises and falls, rain | a wave breaking |
-| Tornado | a throbbing freight-train roar, a whine, debris | debris smashing |
-| Blizzard | wind whistling on two notes, blown snow | ice cracking |
-| Sandstorm | hissing grit over a dry wind | a blast of grit |
-| Supercell | rain, and thunder rolling round it every few seconds | an electric snap |
-| Wildfire | a roar that swells and falls, crackling | a flare-up |
+| Storm | Voice (loop) | Hit | Special |
+|---|---|---|---|
+| Hurricane | stormy rain with hurricane wind | a wave crashing (Water-Ocean) | a large surge wave |
+| Tornado | a tornado | Whoosh Debris Smash | a big gust of wind (dash) |
+| Blizzard | *synthesised: wind whistling on two notes, blown snow* | ten cracks cut from Ice crack 01–05, one at random | Deep Freeze Spell (whiteout) |
+| Sandstorm | blowing sand storm | Sand Sweep Whip | Desert Storm Whoosh (dust wall) |
+| Supercell | rain and rolling thunder | Electric Zap 01–09, one at random | Lightning Thunder, on each bolt |
+| Wildfire | wildfire in a thick forest | Fire burst | Fire Burst Whoosh (firestorm) |
 
-Your storm's voice grows with its energy and is loudest close up. A rival's comes in as it nears the camera, from the side of the screen it is on: 1,500 km off it is nearly as loud as yours, 5,000 km off it is faint. On the select screen, picking a type plays its hit and then its voice. The specials have their own sounds as well; lightning's is the thunder of its bolts.
+And for everyone: storms colliding (rams and locking into a brawl) play Booms Explosions; a KO, Deep Impact Cinematic Boom; taking an energy surge, Energy Recharge Power Up.
+
+Your storm's voice grows with its energy and is loudest close up. A rival's comes in as it nears the camera, from the side of the screen it is on: 1,500 km off it is nearly as loud as yours, 5,000 km off it is faint. On the select screen, picking a type plays its hit and then its voice. The rest (the countdown, the menus, the win, the rumble under a brawl) are synthesised by `js/audio.js`, which also has a synthesised version of every recorded sound: it plays those where the recordings can't load, that is when a page is opened from disk (`file://`) or `HurricaneBrawl.html` is used on its own.
 
 **The food chain.** Each storm does 1.5 times the drain to the one it beats, and 0.7 times to the one that beats it:
 
@@ -346,11 +348,13 @@ It exits non-zero if any of these fails:
   - on a 390 px phone nothing scrolls sideways;
   - with reduced motion, the background video and the moving tape hold still.
 - **The README's diagrams** parse and render with Mermaid 11.
-- **The sound**, measured at the game's output (the level in six frequency bands, A-weighted loudness, left and right):
-  - each type's voice is heard, unlike the other five (some band 6 dB or more apart), within 3 dB of the others' loudness and about as loud as the single wind it replaced (1 dB quieter); its hit is within 4 dB of the others' and quieter than a ram's thud;
-  - in a match, the voice heard is your type's, for each of the six;
+- **The sound**, served over HTTP and measured at the game's output (the level in six frequency bands, K-weighted loudness as in LUFS, left and right):
+  - all 37 recordings load, and the loops decode to their exact length, so there is no gap where they repeat;
+  - each recorded one-shot plays within 4 dB of the synthesised sound it replaces; the six voices are within 3 dB of each other and as loud as the single wind they replaced; the hits are within 4 dB of each other and quieter than a collision;
+  - in a match, for each type, your voice is its loop (the blizzard's synthesised one), and its hit and special play their recordings; collisions, KOs and the energy surge play theirs;
   - a rival held 1,500 km to the east or west raises its band by 6 dB or more, louder on its own side; M mutes, and pausing fades it all out;
-  - your city hits play your type's hit, and on the select screen clicking or pressing → to a type plays its hit and then its voice.
+  - on the select screen clicking or pressing → to a type plays its hit and then its voice;
+  - opened from disk, the game plays with no errors (the synthesised sounds).
 
 **Not verified:**
 - **Hardware:** a real Switch, Xbox or PlayStation controller; a phone.
@@ -377,17 +381,19 @@ js/
   sim.js              a match: motion and winds, energy, damage, brawls, rams, specials, KOs, surges, rebuilding
   ai.js               the rival storms
   input.js            keyboard, mouse and gamepad (Xbox, Switch and PlayStation names), rumble
-  audio.js            the game's sound, synthesised with Web Audio
+  audio.js            the game's sound: the recordings in media/sfx/, synthesised sounds where they can't load
   render.js           the globe, the storms, their moves, the damage layer, the camera
   game.js             select, a match, the HUD and the map, labels, pause, results
   site.js             the landing page's trailer dialog
 fonts/                Anton and Barlow (woff2) and their licences
 media/                the trailer, its poster, the hero loop and the landing page's pictures
+media/sfx/            the game's recorded sounds (tools/sfx.js)
 media/readme/         this README's pictures (not deployed)
 tools/
   build.js            HurricaneBrawl.html and the landing page's generated parts
   check.js            the simulation's checks, in Node
   fetch-earth.js      builds js/earth-data.js from Natural Earth
+  sfx.js              makes media/sfx/ from the downloaded sound effects
   trailer.js          records the trailer in headless Chromium and encodes it
   trailer-shots.js    the trailer's takes
   trailer-music.js    the trailer's soundtrack
@@ -402,6 +408,7 @@ vercel.json           clean URLs
 - **Map data:** coastlines, lakes, populated places and country figures from [Natural Earth](https://www.naturalearthdata.com), public domain, through its GitHub mirror [nvkelso/natural-earth-vector](https://github.com/nvkelso/natural-earth-vector).
 - **[three.js](https://threejs.org/)** (MIT), loaded from jsDelivr, with its post-processing passes for the bloom.
 - **Fonts:** [Anton](https://github.com/googlefonts/AntonFont) and [Barlow](https://github.com/jpt/barlow), SIL Open Font License 1.1 (`fonts/LICENSE-*.txt`).
-- **The trailer's music** is synthesised by `tools/trailer-music.js`; the game's sounds by `js/audio.js`. Neither uses samples.
+- **Sound effects** in `media/sfx/`: from [Envato Elements](https://elements.envato.com), used under licence.
+- **The trailer's music** is synthesised by `tools/trailer-music.js`, as are the game's fallback sounds by `js/audio.js`.
 
 A game about weather, not a forecast: the storms, the climate and the values are simplified for play.

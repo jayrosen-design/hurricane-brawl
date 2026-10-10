@@ -2260,6 +2260,10 @@ const BrawlInput = (() => {
  *   one-shots   the specials (surge, dash, freeze, dust wall, fire; lightning's bolts thunder), thud
  *               (brawls and rams), KO, energy surge, countdown and menu blips; and a low rumble under
  *               a brawl
+ * Recorded sounds (media/sfx/, made by tools/sfx.js) take the place of most of these once they have
+ * loaded: five of the voices (the blizzard keeps its synthesised one), every type's hit, the specials,
+ * collisions, KOs and the energy surge. Where they can't load (the page opened from file://, or
+ * HurricaneBrawl.html on its own) the synthesised sounds play instead.
  * It starts on the first key, click or button (browsers keep audio off until then). M mutes.
  */
 const BrawlAudio = (() => {
@@ -2307,6 +2311,41 @@ const BrawlAudio = (() => {
   };
   const VOICE = 0.3;   // a voice at full
 
+  // the recorded sounds: how many files of each (name-1.mp3 ... when more than one; one is picked at
+  // random each time), and the level each plays at
+  const SFX = document.currentScript && document.currentScript.src ? new URL('../media/sfx/', document.currentScript.src).href : new URL('media/sfx/', location.href).href;
+  const FILES = {
+    'loop-hurricane': 1, 'loop-tornado': 1, 'loop-sandstorm': 1, 'loop-supercell': 1, 'loop-wildfire': 1,
+    surge: 1, dash: 1, freeze: 1, haboob: 1, thunder: 1, fire: 1, thud: 1, ko: 1, pickup: 1,
+    'hit-hurricane': 1, 'hit-tornado': 1, 'hit-blizzard': 10, 'hit-sandstorm': 1, 'hit-supercell': 9, 'hit-wildfire': 1,
+  };
+  const LEVEL = {
+    'loop-hurricane': 0.8, 'loop-tornado': 0.8, 'loop-sandstorm': 0.8, 'loop-supercell': 0.8, 'loop-wildfire': 0.8,
+    surge: 0.9, dash: 0.24, freeze: 0.29, haboob: 0.57, thunder: 0.44, fire: 0.34, thud: 0.86, ko: 0.38, pickup: 0.25,
+    'hit-hurricane': 0.3, 'hit-tornado': 0.3, 'hit-blizzard': 0.64, 'hit-sandstorm': 0.3, 'hit-supercell': 0.3, 'hit-wildfire': 0.3,
+  };
+  const samples = {};
+  let loading = 0;   // files still on their way
+  function load() {
+    if (location.protocol === 'file:') return;   // browsers don't let a page fetch files from disk
+    for (const [name, n] of Object.entries(FILES)) {
+      const urls = Array.from({ length: n }, (_, i) => SFX + (n > 1 ? `${name}-${i + 1}` : name) + '.mp3');
+      loading++;
+      Promise.all(urls.map((u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); }).then((b) => ctx.decodeAudioData(b))))
+        .then((list) => { samples[name] = list; }, () => { /* the synthesised sound plays instead */ })
+        .finally(() => loading--);
+    }
+  }
+  // plays a recorded sound at volume v, into out; false if it isn't loaded
+  function sample(name, v, out = master) {
+    const list = samples[name];
+    if (!list) return false;
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = list[(Math.random() * list.length) | 0]; g.gain.value = v * LEVEL[name];
+    src.connect(g).connect(out); src.start();
+    return true;
+  }
+
   function start() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -2333,6 +2372,7 @@ const BrawlAudio = (() => {
     f.type = 'lowpass'; f.frequency.value = 110; f.Q.value = 0.8;
     rumble = ctx.createGain(); rumble.gain.value = 0;
     src.connect(f).connect(rumble).connect(master); src.start();
+    load();
   }
   ['keydown', 'pointerdown', 'gamepadconnected'].forEach((t) => window.addEventListener(t, start, { passive: true }));
 
@@ -2341,6 +2381,13 @@ const BrawlAudio = (() => {
     const out = ctx.createGain(), pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
     out.gain.value = 0;
     if (pan) out.connect(pan).connect(master); else out.connect(master);
+    const rec = samples['loop-' + type];
+    if (rec) {
+      const src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = rec[0]; src.loop = true; g.gain.value = LEVEL['loop-' + type] / VOICE;
+      src.connect(g).connect(out); src.start(0, Math.random() * src.buffer.duration);
+      return { out, pan, roll: Infinity };   // (the recording has its own thunder)
+    }
     const wave = (param, depth, rate) => {
       for (const [k, share] of [[1, 0.6], [2.37, 0.4]]) {
         const o = ctx.createOscillator(), g = ctx.createGain();
@@ -2367,7 +2414,7 @@ const BrawlAudio = (() => {
     const t = ctx.currentTime;
     for (const type in VOICES) {
       const h = heard[type], v = on && h ? Math.min(1.2, h.v) : 0;
-      if (!voices[type] && v < 0.01) continue;
+      if (!voices[type] && (v < 0.01 || loading > 0)) continue;   // a voice waits for its recording
       const V = voices[type] || (voices[type] = voice(type));
       V.out.gain.setTargetAtTime(v * VOICE, t, 0.25);
       if (V.pan && h) V.pan.pan.setTargetAtTime(h.pan, t, 0.15);
@@ -2423,12 +2470,12 @@ const BrawlAudio = (() => {
   // a one-shot at volume v (0-1)
   function play(name, v = 1) {
     if (!ctx || muted || v < 0.02 || !SOUNDS[name]) return;
-    SOUNDS[name](Math.min(1, v));
+    if (!sample(name, Math.min(1, v))) SOUNDS[name](Math.min(1, v));
   }
   // a storm type's hit at volume v (0-1)
   function hit(type, v = 1) {
     if (!ctx || muted || v < 0.02 || !HITS[type]) return;
-    HITS[type](Math.min(1, v));
+    if (!sample('hit-' + type, Math.min(1, v))) HITS[type](Math.min(1, v));
   }
   return { start, update, play, hit, setMuted, get muted() { return muted; } };
 })();
